@@ -5,3 +5,31 @@ npx sequelize-cli model:generate --name User --attributes id:integer,name:string
 npx sequelize-cli model:generate --name Channel --attributes description:string, comission_fee:decimal
 
 npx sequelize-cli model:generate --name PaymentMethod --attributes description:string,operator_fee:decimal
+
+--
+
+npx sequelize-cli model:generate --name Carrier --attributes name:string
+
+=======================================================================================================================================================================================================
+
+
+npx sequelize-cli model:generate --name City --attributes name:string,state:char
+
+npx sequelize-cli model:generate --name Costumer --attributes name:string,address:text,phone:string,is_whatsapp:boolen,city_id:int
+
+npx sequelize-cli model:generate --name CostumerTag --attributes costumer_id:int,tag_id:int
+
+npx sequelize-cli model:generate --name Order --attributes external_code:strring,theme:string,description:text,remarks:text,pic_url:string,custom_name:string,custom_age:tinyint,order_date:datetime,event_date:date,artwork_date:date,shipment:date,total_amount:decimal,costumer_id:int,channel_id:int,carrier_id:int,shipent_priority_id:int,payment_method_id:int
+
+npx sequelize-cli model:generate --name OrderRelStatus --attributes oder_id:int,order_status_id:int,user_id:int
+
+npx sequelize-cli model:generate --name OrderStatus --attributes sequence:tinYint,description:string
+
+npx sequelize-cli model:generate --name OrderTag --attributes order_id:int,tag_id:int
+
+npx sequelize-cli model:generate --name shipmentPriority --attributes description:string,operator_fee:decimal
+
+npx sequelize-cli model:generate --name description:string,color:string,type:enum
+
+
+npx sequelize-cli model:generate --name NomeDoModel–-attributes <lista de atributos>
