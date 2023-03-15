@@ -35,6 +35,12 @@ app.use('/users', users)
 const channels = require('./routes/channels')
 app.use('/channels', channels)
 
+const cities = require('./routes/cities')
+app.use('/cities', cities)
+
+const customers = require('./routes/customers')
+app.use('/customers', customers)
+
 const paymentMethods = require('./routes/payment_methods')
 app.use('/payment_methods', paymentMethods)
 
