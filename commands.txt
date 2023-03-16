@@ -4,3 +4,6 @@ npx sequelize-cli model:generate --name User --attributes id:integer,name:string
 npx sequelize-cli model:generate --name Channel --attributes id:integer,description:string,commission_fee:decimal
 
 npx sequelize-cli model:generate --name PaymentMethod --attributes description:string,operator_fee:decimal
+
+// Comando para gerar apenas uma migration (sem model)
+npx sequelize-cli migration:generate --name alter-table-users
