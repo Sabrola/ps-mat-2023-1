@@ -38,10 +38,16 @@ app.use('/channels', channels)
 const cities = require('./routes/cities')
 app.use('/cities', cities)
 
+const customerTags = require('./routes/customer_tags')
+app.use('/customer_tags', customerTags)
+
 const customers = require('./routes/customers')
 app.use('/customers', customers)
 
 const paymentMethods = require('./routes/payment_methods')
 app.use('/payment_methods', paymentMethods)
+
+const tags = require('./routes/tags')
+app.use('/tags', tags)
 
 module.exports = app;
