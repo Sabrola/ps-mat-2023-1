@@ -1,6 +1,6 @@
 // Gerar model + migration
 
-npx sequelize-cli model:generate --name User --attributes id:integereger,name:string,email:string,verified_email:boolean,is_admin:boolean,phone:string,password:string
+npx sequelize-cli model:generate --name User --attributes id:Integer,name:string,email:string,verified_email:boolean,is_admin:boolean,phone:string,password:string
 
 npx sequelize-cli model:generate --name Channel --attributes description:string, comission_fee:decimal
 
@@ -17,15 +17,15 @@ npx sequelize-cli model:generate --name Carrier --attributes name:string
 
 //---------npx sequelize-cli model:generate --name Customer --attributes name:string,address:text,phone:string,is_whatsapp:boolean,city_id:Float
 
-npx sequelize-cli model:generate --name CustomerTag --attributes customer_id:integereger,tag_id:integereger
+//---------npx sequelize-cli model:generate --name CustomerTag --attributes customer_id:Integer,tag_id:Integer
 
-npx sequelize-cli model:generate --name Order --attributes external_code:strring,theme:string,description:text,remarks:text,pic_url:string,custom_name:string,custom_age:tinyintegereger,order_date:datetime,event_date:date,artwork_date:date,shipment:date,total_amount:decimal,customer_id:integereger,channel_id:integereger,carrier_id:integereger,shipent_priority_id:integereger,payment_method_id:integereger
+npx sequelize-cli model:generate --name Order --attributes external_code:strring,theme:string,description:text,remarks:text,pic_url:string,custom_name:string,custom_age:tinyInteger,order_date:datetime,event_date:date,artwork_date:date,shipment:date,total_amount:decimal,customer_id:Integer,channel_id:Integer,carrier_id:Integer,shipent_priority_id:Integer,payment_method_id:Integer
 
-npx sequelize-cli model:generate --name OrderRelStatus --attributes oder_id:integereger,order_status_id:integereger,user_id:integereger
+npx sequelize-cli model:generate --name OrderRelStatus --attributes oder_id:Integer,order_status_id:Integer,user_id:Integer
 
-npx sequelize-cli model:generate --name OrderStatus --attributes sequence:tinYintegereger,description:string
+npx sequelize-cli model:generate --name OrderStatus --attributes sequence:tinYInteger,description:string
 
-npx sequelize-cli model:generate --name OrderTag --attributes order_id:integereger,tag_id:integer
+npx sequelize-cli model:generate --name OrderTag --attributes order_id:Integer,tag_id:integer
 
 npx sequelize-cli model:generate --name shipmentPriority --attributes description:string,operator_fee:decimal
 
