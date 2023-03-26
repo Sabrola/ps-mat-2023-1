@@ -26,18 +26,11 @@ controller.create = async (req, res) => {
 controller.retrieve = async (req, res) => {
   try {
     const data = await User.findAll()
-<<<<<<< HEAD
     
     //HTTP 200: OK (Implicito)
     res.send(data)
   }
   catch {
-=======
-    // HTTP 200: OK (implícito)
-    res.send(data)
-  }
-  catch(error) {
->>>>>>> c331981c84dd89cf802584b4f8cb394db1ab5fae
     console.error(error)
   }
 }
@@ -46,17 +39,10 @@ controller.retrieveOne = async (req, res) => {
   try {
     const data = await User.findByPk(req.params.id)
     
-<<<<<<< HEAD
     //HTTP 200: OK (Implicito)
     if(data) res.send(data)
 
     //HTTP 404 (Not Found)
-=======
-    // HTTP 200: OK (implícito)
-    if(data) res.send(data)
-    
-    // HTTP 404: Not Found
->>>>>>> c331981c84dd89cf802584b4f8cb394db1ab5fae
     else res.status(404).end()
     
   }
@@ -65,51 +51,4 @@ controller.retrieveOne = async (req, res) => {
   }
 }
 
-<<<<<<< HEAD
-=======
-controller.update = async (req, res) => {
-  try {
-    const response = await User.update(
-      req.body,
-      { where: { id: req.params.id }}
-    )
-
-    // response retorna um vetor. O primeiro elemento
-    // do vetor indica quantos registros foram afetados
-    // pelo update
-    if(response[0] > 0) {
-      // HTTP 204: No content
-      res.status(204).end()
-    }
-    else {  // Não encontrou o registro para atualizar
-      // HTTP 404: Not found
-      res.status(404).end()
-    }
-  }
-  catch(error) {
-    console.error(error)
-  }
-}
-
-controller.delete = async (req, res) => {
-  try {
-    const response = await User.destroy(
-      { where: { id: req.params.id } }
-    )
-
-    if(response) {  // Encontrou e excluiu
-      // HTTP 204: No content
-      res.status(204).end()
-    }
-    else {          // Não encontrou e não excluiu
-      // HTTP 404: Not found
-      res.status(404).end()
-    }
-  }
-  catch(error) {
-    console.error(error)
-  }
-}
-
->>>>>>> c331981c84dd89cf802584b4f8cb394db1ab5fae
 module.exports = controller
