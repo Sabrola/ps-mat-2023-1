@@ -25,11 +25,11 @@ npx sequelize-cli model:generate --name Carrier --attributes name:string
 
 //---------npx sequelize-cli model:generate --name OrderStatus --attributes sequence:Integer,description:string
 
-npx sequelize-cli model:generate --name OrderTag --attributes order_id:Integer,tag_id:integer
+//---------npx sequelize-cli model:generate --name OrderTag --attributes order_id:Integer,tag_id:integer
 
-npx sequelize-cli model:generate --name shipmentPriority --attributes description:string,operator_fee:decimal
+//---------npx sequelize-cli model:generate --name shipmentPriority --attributes description:string
 
-npx sequelize-cli model:generate --name Tag -attributes description:string,color:string,type:enum
+npx sequelize-cli model:generate --name Tag --attributes description:string,color:string,type:enum
 
 
 npx sequelize-cli model:generate --name NomeDoModel–-attributes <lista de atributos>

@@ -57,4 +57,13 @@ app.use('/order_rel_statuses', orderRelStatuses)
 const orderStatuses = require('./routes/order_statuses')
 app.use('/order_statuses', orderStatuses)
 
+const OrderTags = require('./routes/order_tags')
+app.use('/order_tags', OrderTags)
+
+const shipmentPriority = require('./route/shipment_priorities')
+app.use('/shipment_priorities', shipmentPriority)
+
+const tags = require('./routes/tags')
+app.use('/tags', tags)
+
 module.exports = app;
