@@ -19,11 +19,11 @@ npx sequelize-cli model:generate --name Carrier --attributes name:string
 
 //---------npx sequelize-cli model:generate --name CustomerTag --attributes customer_id:Integer,tag_id:Integer
 
-npx sequelize-cli model:generate --name Order --attributes external_code:strring,theme:string,description:text,remarks:text,pic_url:string,custom_name:string,custom_age:tinyInteger,order_date:datetime,event_date:date,artwork_date:date,shipment:date,total_amount:decimal,customer_id:Integer,channel_id:Integer,carrier_id:Integer,shipent_priority_id:Integer,payment_method_id:Integer
+//---------npx sequelize-cli model:generate --name Order --attributes external_code:string,theme:string,description:text,remarks:text,pic_url:string,custom_name:string,custom_age:Integer,order_date:date,event_date:date,artwork_date:date,shipment:date,total_amount:decimal,customer_id:Integer,channel_id:Integer,carrier_id:Integer,shipent_priority_id:Integer,payment_method_id:Integer
 
-npx sequelize-cli model:generate --name OrderRelStatus --attributes oder_id:Integer,order_status_id:Integer,user_id:Integer
+//---------npx sequelize-cli model:generate --name OrderRelStatus --attributes oder_id:Integer,order_status_id:Integer,user_id:Integer
 
-npx sequelize-cli model:generate --name OrderStatus --attributes sequence:tinYInteger,description:string
+//---------npx sequelize-cli model:generate --name OrderStatus --attributes sequence:Integer,description:string
 
 npx sequelize-cli model:generate --name OrderTag --attributes order_id:Integer,tag_id:integer
 
