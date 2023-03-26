@@ -26,11 +26,10 @@ controller.create = async (req, res) => {
 controller.retrieve = async (req, res) => {
   try {
     const data = await Channel.findAll()
-    
-    //HTTP 200: OK (Implicito)
+    // HTTP 200: OK (implícito)
     res.send(data)
   }
-  catch {
+  catch(error) {
     console.error(error)
   }
 }
@@ -39,12 +38,55 @@ controller.retrieveOne = async (req, res) => {
   try {
     const data = await Channel.findByPk(req.params.id)
     
-    //HTTP 200: OK (Implicito)
+    // HTTP 200: OK (implícito)
     if(data) res.send(data)
-
-    //HTTP 404 (Not Found)
+    // HTTP 404: Not Found
     else res.status(404).end()
     
+  }
+  catch(error) {
+    console.error(error)
+  }
+}
+
+controller.update = async (req, res) => {
+  try {
+    const response = await Channel.update(
+      req.body,
+      { where: { id: req.params.id }}
+    )
+
+    // response retorna um vetor. O primeiro elemento
+    // do vetor indica quantos registros foram afetados
+    // pelo update
+    if(response[0] > 0) {
+      // HTTP 204: No content
+      res.status(204).end()
+    }
+    else {  // Não encontrou o registro para atualizar
+      // HTTP 404: Not found
+      res.status(404).end()
+    }
+  }
+  catch(error) {
+    console.error(error)
+  }
+}
+
+controller.delete = async (req, res) => {
+  try {
+    const response = await Channel.destroy(
+      { where: { id: req.params.id } }
+    )
+
+    if(response) {  // Encontrou e excluiu
+      // HTTP 204: No content
+      res.status(204).end()
+    }
+    else {          // Não encontrou e não excluiu
+      // HTTP 404: Not found
+      res.status(404).end()
+    }
   }
   catch(error) {
     console.error(error)

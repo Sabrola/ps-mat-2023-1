@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('payment_methods', {
+    await queryInterface.createTable('customers', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,34 +10,34 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING(100)
+        type: Sequelize.STRING(100),
+        allowNull: false
       },
-      email: {
-        type: Sequelize.STRING(100)
-      },
-      verified_email: {
-        type: Sequelize.BOOLEAN
-      },
-      is_admin: {
-        type: Sequelize.BOOLEAN
+      address: {
+        type: Sequelize.TEXT
       },
       phone: {
-        type: Sequelize.STRING(20)
+        type: Sequelize.STRING(20),
+        allowNull: false
       },
-      password: {
-        type: Sequelize.STRING(200)
+      is_whatsapp: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
       },
-      created_at: {
+      city_id: {
+        type: Sequelize.INTEGER
+      },
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('payment_methods');
+    await queryInterface.dropTable('customers');
   }
 };

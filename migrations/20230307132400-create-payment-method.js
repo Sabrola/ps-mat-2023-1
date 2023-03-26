@@ -9,29 +9,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING(100)
+      description: {
+        type: Sequelize.STRING(30)
       },
-      email: {
-        type: Sequelize.STRING(100)
+      operator_fee: {
+        type: Sequelize.DECIMAL(18, 2)
       },
-      verified_email: {
-        type: Sequelize.BOOLEAN
-      },
-      is_admin: {
-        type: Sequelize.BOOLEAN
-      },
-      phone: {
-        type: Sequelize.STRING(20)
-      },
-      password: {
-        type: Sequelize.STRING(200)
-      },
-      created_at: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
       }
