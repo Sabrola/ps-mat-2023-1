@@ -49,7 +49,22 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
-    tableName: 'users'
+    tableName: 'users',
+    //Esconde o campo 'password' no retrieve e retrieveOne
+    defaultScope: {
+      attributes: {
+        exclude: ['passworld']
+      }
+    },
+    scopes: {
+          //Inclui o campo 'password' (Necessário login)
+      withPassworld: {
+        attributes: {
+          include: ['password']
+        }
+      }
+    }
+    
   });
   return User;
 };

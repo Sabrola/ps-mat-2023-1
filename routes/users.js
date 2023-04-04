@@ -3,5 +3,8 @@ const router = express.Router()
 const controller = require('../controllers/user')
 
 router.post('/', controller.create)
+router.get()
+router.get()
+router.post()
 
 module.exports = router
