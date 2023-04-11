@@ -33,3 +33,21 @@ npx sequelize-cli model:generate --name Tag --attributes description:string,colo
 
 
 npx sequelize-cli model:generate --name NomeDoModel–-attributes <lista de atributos>
+
+cd back-end <-- Rodar back-end
+
+=======================================================================================================================================================================================================
+
+cd .. <-- Voltar ao diretorio anterior
+
+npm create vite@latest front-end
+    React
+    JavaScript
+
+npm run dev
+
+=======================================================================================================================================================================================================
+
+npx create-react-app front-end
+
+npm i react-router-dom
