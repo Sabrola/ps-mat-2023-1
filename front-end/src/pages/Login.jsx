@@ -7,6 +7,7 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
+import myfetch from '../utils/myfetch'
 
 export default function Login() {
 
@@ -16,7 +17,7 @@ export default function Login() {
   const [snack, setSnack] = React.useState({
     show: false,
     message: '',
-    severity: 'success' // 'error'
+    severity: 'success' // ou 'error'
   })
 
   function handleChange(event) {
@@ -26,24 +27,17 @@ export default function Login() {
 
   async function handleSubmit(event) {
     event.preventDefault()      // Impede o recarregamento da página
-    setShowWaiting(true)        //Mostra o spinner de espera
+    setShowWaiting(true)        // Mostra o spinner de espera
     try {
-      let response = await fetch('http://localhost:3000/users/login', {
-        method: "POST",
-        body: JSON.stringify({email, password}),
-        headers: {"Content-type": "application/json; charset=UTF-8"}
-      })
-      const result = response.json()
-      console.log({result})
 
-      //Grava o token recebido no localStorage
-      //Isso é um SERIO PROBLEMA DE SEGUNRANÇA, temos que concentar depois
+      const result = await myfetch.post('/users/login', { email, password })
+
       window.localStorage.setItem('token', result.token)
 
-      //Exibe o snackBar de sucesso
+      // Exibe o snackbar de sucesso
       setSnack({
         show: true,
-        message: 'Autenticação reealizada com sucesso!',
+        message: 'Autenticação realizada com sucesso!',
         severity: 'success'
       })
 
@@ -51,33 +45,35 @@ export default function Login() {
     catch(error) {
       console.error(error)
 
-      //Exibe o snackBar de erro
+      // Apaga o token de autenticação no localStorage, caso exista
+      window.localStorage.removeItem('token')  
+
+      // Exibe o snackbar de erro
       setSnack({
         show: true,
         message: error.message,
         severity: 'error'
       })
     }
-    finally{
-      setShowWaiting(false)   //Esconde o spinner de espera novamente
+    finally {
+      setShowWaiting(false)   // Esconde o spinner de espera
     }
   }
 
   function handleSnackClose(event, reason) {
     if (reason === 'clickaway') {
       return;
-    
-      setSnack({ show: false })
     }
-  }
+    setSnack({ show: false })
+  };
 
   return (
     <>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={showWaiting}
-          >
-      <CircularProgress color="inherit" />
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={showWaiting}
+      >
+        <CircularProgress color="inherit" />
       </Backdrop>
 
       <Snackbar open={snack.show} autoHideDuration={4000} onClose={handleSnackClose}>
