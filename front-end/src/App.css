@@ -1,3 +1,11 @@
 .form-field {
   margin-bottom: 25px !important;
 }
+
+.muiDataGrid-row button {
+  visibility: hidden;
+}
+
+.muiDataGrid-row:hover button {
+  visibility: visible;
+}
