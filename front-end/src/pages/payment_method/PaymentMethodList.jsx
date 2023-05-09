@@ -2,25 +2,60 @@ import React from 'react'
 import myfetch from '../../utils/myfetch'
 import PageTitle from '../../components/ui/PageTitle'
 import Paper from '@mui/material/Paper';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
-
+import ConfirmDialog from '../../components/ui/ConfirmDialog'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import { Link } from 'react-router-dom'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 export default function PaymentMethodList() {
+  const API_PATH = '/payment_methods'
 
-  const [paymentMethods, setPaymentMethods] = React.useState([])
+  const [state, setState] = React.useState({
+    paymentMethods: [],
+    showWaiting: false,
+    showDialog: false,
+    deleteId: null,
+    snack: {
+      show: false,
+      message: '',
+      severity: 'success' // ou 'error'
+    }
+  })
+  const {
+    paymentMethods,
+    showWaiting,
+    showDialog,
+    deleteId,
+    snack
+  } = state
 
   async function fetchData() {
+    setState({ ...state, showWaiting: true })
     try {
-      const result = await myfetch.get('/payment_methods')
-      setPaymentMethods(result)
+      const result = await myfetch.get(API_PATH)
+      setState({ 
+        ...state, 
+        paymentMethods: result, 
+        showWaiting: false,
+        showDialog: false
+      })
     }
     catch(error) {
       console.log(error)
+      setState({ 
+        ...state, 
+        showWaiting: false,
+        showDialog: false
+      })
     }
   }
 
@@ -29,7 +64,7 @@ export default function PaymentMethodList() {
   }, [])
 
   const columns = [
-    { field: 'id', headerName: 'Cod', width: 90 },
+    { field: 'id', headerName: 'Cód.', width: 90 },
     {
       field: 'description',
       headerName: 'Descrição',
@@ -38,21 +73,86 @@ export default function PaymentMethodList() {
     {
       field: 'operator_fee',
       headerName: 'Taxa de operação',
-      width: 150,
+      width: 150
     },
     {
       field: 'edit',
       headerName: 'Editar',
+      headerAlign: 'center',
+      align: 'center',
       width: 90,
-      renderCell: params => ( <IconButton aria-label="Editar"> <EditIcon /> </IconButton>)
+      renderCell: params => (
+        <IconButton aria-label="Editar">
+          <EditIcon />
+        </IconButton>
+      )
     },
     {
       field: 'delete',
-      headerName: 'Deletar',
+      headerName: 'Excluir',
+      headerAlign: 'center',
+      align: 'center',
       width: 90,
-      renderCell: params => ( <IconButton aria-label="Excluir"> <DeleteForeverIcon color="error" /> </IconButton>)
-    },
+      renderCell: params => (
+        <IconButton 
+          aria-label="excluir"
+          onClick={() => setState({
+            ...state,
+            deleteId: params.id,  // guarda o id do item a ser excluído
+            showDialog: true      // mostra o diálogo de confirmação
+          })}
+        >
+          <DeleteForeverIcon color="error" />
+        </IconButton>
+      )
+    }
   ];
+
+  async function handleDialogClose(answer) {
+    if(answer) {
+      // Fecha o diálogo de confirmação e exibe o backdrop
+      setState({ ...state, showWaiting: true, showDialog: false })
+      try {
+        await myfetch.delete(`${API_PATH}/${deleteId}`)
+        setState({
+          ...state,
+          showWaiting: false,   // esconde o backdrop
+          showDialog: false,    // esconde o diálogo de confirmação
+          snack: {              // exibe a snackbar
+            show: true,
+            message: 'Item excluído com sucesso',
+            severity: 'success'
+          }
+        })
+        // Recarrega os dados da listagem
+        fetchData()
+      }
+      catch(error) {
+        console.error(error)
+        setState({
+          ...state,
+          showWaiting: false,   // esconde o backdrop
+          showDialog: false,    // esconde o diálogo de confirmação
+          snack: {              // exibe a snackbar
+            show: true,
+            message: 'ERRO: ' + error.message,
+            severity: 'error'
+          }
+        })
+      }
+    }
+    else {
+      // Fecha o diálogo de confirmação
+      setState({ ...state, showDialog: false })
+    }
+  }
+  
+  function handleSnackClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setState({ ...state, snack: { show: false } })
+  };
 
   return (
     <>
@@ -63,23 +163,46 @@ export default function PaymentMethodList() {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      <PageTitle title="Listagem de métodos de pagamento" />
+      <ConfirmDialog 
+        title="Confirmar operação"
+        open={showDialog}
+        onClose={handleDialogClose}
+      >
+        Deseja realmente excluir este item?
+      </ConfirmDialog>
+
+      <Snackbar open={snack.show} autoHideDuration={4000} onClose={handleSnackClose}>
+        <Alert onClose={handleSnackClose} severity={snack.severity} sx={{ width: '100%' }}>
+          {snack.message}
+        </Alert>
+      </Snackbar>
+
+      <PageTitle title="Listagem de métodos de pagamento"  />
+
+      <Box sx={{display: "flex",    justifyContent: "Right",    marginBottom: "25px"}}
+      >
+        <Link to="/payment_methods/new">
+          <Button variant="contained" size="large" color="secondary"    starIcon={<AddCircleIcon />}>
+            Cadastrar Novo
+          </Button>
+        </Link>
+      </Box>
 
       <Paper elevation={4} sx={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={paymentMethods}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
+        <DataGrid
+          rows={paymentMethods}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
             },
-          },
-        }}
-        pageSizeOptions={[5]}
-        disableRowSelectionOnClick
-      />
-    </Paper>
+          }}
+          pageSizeOptions={[5]}
+          disableRowSelectionOnClick
+        />
+      </Paper>
     </>
   )
 }
