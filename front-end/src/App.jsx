@@ -18,15 +18,22 @@ function App() {
   return (
     <BrowserRouter>
       <HeaderBar />
-      <Box sx={{ m: '25px auto', p: '16px' }}>
+      <Box sx={{ m: '25px auto', p: '25px' }}>
         <Routes>
+          
           <Route path="/login" element={<Login />} />
+          
+          <Route path="/" element={ 
+            <AuthGuard> <Home /> </AuthGuard> 
+          } />
+          
+          <Route path="/payment_method" element={ 
+            <AuthGuard> <PaymentMethodList /> </AuthGuard> 
+          } />
 
-          <Route path="/" element={ <AuthGuard> <Home /> </AuthGuard> } />
-
-          <Route path="/payment_method" element={ <AuthGuard> <PaymentMethodList /> </AuthGuard> } />
-
-          <Route path="/payment_method/new" element={ <AuthGuard> <PaymentMethodListForm /> </AuthGuard> } />
+          <Route path="/payment_method/new" element={ 
+            <AuthGuard> <PaymentMethodForm /> </AuthGuard> 
+          } />
 
         </Routes>
       </Box>

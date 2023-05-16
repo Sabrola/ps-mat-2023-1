@@ -8,9 +8,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import IconButton from '@mui/material/IconButton'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
-import ConfirmDialog from '../../components/ui/ConfirmDialog'
-import Snackbar from '@mui/material/Snackbar'
-import Alert from '@mui/material/Alert'
+import ConfirmDialog from '../../components/ui/ComfirmDialog'
+import Notification from '../../components/ui/Notification'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import { Link } from 'react-router-dom'
@@ -24,7 +23,7 @@ export default function PaymentMethodList() {
     showWaiting: false,
     showDialog: false,
     deleteId: null,
-    snack: {
+    notif: {
       show: false,
       message: '',
       severity: 'success' // ou 'error'
@@ -35,7 +34,7 @@ export default function PaymentMethodList() {
     showWaiting,
     showDialog,
     deleteId,
-    snack
+    notif
   } = state
 
   async function fetchData() {
@@ -147,11 +146,11 @@ export default function PaymentMethodList() {
     }
   }
   
-  function handleSnackClose(event, reason) {
+  function handleNotifClose(event, reason) {
     if (reason === 'clickaway') {
       return;
     }
-    setState({ ...state, snack: { show: false } })
+    setState({ ...state, notif: { show: false } })
   };
 
   return (
@@ -171,19 +170,29 @@ export default function PaymentMethodList() {
         Deseja realmente excluir este item?
       </ConfirmDialog>
 
-      <Snackbar open={snack.show} autoHideDuration={4000} onClose={handleSnackClose}>
-        <Alert onClose={handleSnackClose} severity={snack.severity} sx={{ width: '100%' }}>
-          {snack.message}
-        </Alert>
-      </Snackbar>
+      <Notification 
+        show={notif.show}
+        severity={notif.severity}
+        onClose={handleNotifClose}
+      >
+        {notif.message}
+      </Notification>
 
       <PageTitle title="Listagem de métodos de pagamento"  />
 
-      <Box sx={{display: "flex",    justifyContent: "Right",    marginBottom: "25px"}}
-      >
-        <Link to="/payment_methods/new">
-          <Button variant="contained" size="large" color="secondary"    starIcon={<AddCircleIcon />}>
-            Cadastrar Novo
+      <Box sx={{
+        display: "flex",
+        justifyContent: "right",
+        marginBottom: "25px"
+      }}>
+        <Link to="new">
+          <Button 
+            variant="contained" 
+            size="large" 
+            color="secondary"
+            startIcon={<AddCircleIcon />}
+          >
+            Cadastrar novo
           </Button>
         </Link>
       </Box>
