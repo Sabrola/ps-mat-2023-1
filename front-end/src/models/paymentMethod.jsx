@@ -16,4 +16,6 @@ const PaymentMethod = Joi.object({
 
 })
 
+//Permite campos não validados, como id, createdEt e uptadedAt
+.options({allowUnknown: true})
 export default PaymentMethod

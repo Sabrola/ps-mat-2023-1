@@ -7,7 +7,7 @@ import myfetch from '../../utils/myfetch'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Notification from '../../components/ui/Notification'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import PaymentMethod from '../../models/paymentMethod'
 import getValidationMessages from '../../utils/getValidationsMessages'
 
@@ -15,6 +15,7 @@ export default function PaymentMethodForm() {
   const API_PATH = '/payment_methods'
 
   const navigate = useNavigate()
+  const params = useParams()
 
   const [state, setState] = React.useState({
     paymentMethod: {
@@ -48,12 +49,45 @@ export default function PaymentMethodForm() {
     sendData()
   }
 
+    //Esse useEffect será executado  apenas durante o carregamento inicial da página
+  react.useEffect(() => {
+    //Se houver parâmetro id na rota, devemos carregar um registroexsitente para edição
+    if(params.id) fetchData()
+  }, [])
+
+  async function fetchData() {
+    setState({...state, showWaiting: true, errors:{}})
+    try {
+      const result = myfetch.get(`${API_PATH}/${params.id}`)
+      setState({
+        ...state,
+        showWaiting: false
+      })
+    }
+    catch(error) {      
+        console.error(error)
+        setState({
+        ...state, 
+            showWaiting: false,
+            notif: {
+            severity: 'error',
+            show: true,
+            message: 'ERRO: ' + error.message
+            }
+        })
+      }
+  }
+
   async function sendData() {
     setState({...state, showWaiting: true})
     try {
       
       // Chama a validação da biblioteca Joi
       await PaymentMethod.validateAsync(paymentMethod)
+
+      if (params.id) await myfetch.post(API_PATH, paymentMethod)
+
+      else if (params.id) await myfetch.post(API_PATH, )
 
       await myfetch.post(API_PATH, paymentMethod)
       setState({
@@ -67,7 +101,7 @@ export default function PaymentMethodForm() {
       })
     }
     catch(error) {
-        const { validationError, errorMessages } = getValidationMessages(error)
+      const { validationError, errorMessages } = getValidationMessages(error)
         
         console.error(error)
         setState({
@@ -110,7 +144,9 @@ export default function PaymentMethodForm() {
         {notif.message}
       </Notification>
       
-      <PageTitle title="Cadastrar novo método de pagamento" />
+      <PageTitle 
+        title={params.id ? "Editar método de pagamento" : "Cadastrar novo método de pagamento"}
+       />
 
       <div>{notif.severity}</div>
 
