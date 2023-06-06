@@ -1,8 +1,7 @@
 // Importar o model correspondente ao controller
 const { User } = require('../models')
 const bcrypt = require('bcrypt')
-const { underscoredIf } = require('sequelize/types/utils')
-const jwt = require(jsonwebtoken)
+const jwt = require('jsonwebtoken')
 
 const controller = {}   // Objeto vazio
 
@@ -33,11 +32,10 @@ controller.create = async (req, res) => {
 controller.retrieve = async (req, res) => {
   try {
     const data = await User.findAll()
-    
-    //HTTP 200: OK (Implicito)
+    // HTTP 200: OK (implícito)
     res.send(data)
   }
-  catch {
+  catch(error) {
     console.error(error)
   }
 }
@@ -46,10 +44,10 @@ controller.retrieveOne = async (req, res) => {
   try {
     const data = await User.findByPk(req.params.id)
     
-    //HTTP 200: OK (Implicito)
+    // HTTP 200: OK (implícito)
     if(data) res.send(data)
-
-    //HTTP 404 (Not Found)
+    
+    // HTTP 404: Not Found
     else res.status(404).end()
     
   }
@@ -61,10 +59,47 @@ controller.retrieveOne = async (req, res) => {
 controller.update = async (req, res) => {
   try {
 
-    //Se houver sido passado o campo 'password', criptografa a senha
+    // Se houver sido passado o campo "password",
     // criptografa a senha
-    if (req.body.password) {
+    if(req.body.password) {
       req.body.password = await bcrypt.hash(req.body.password, 12)
+    }
+
+    const response = await User.update(
+      req.body,
+      { where: { id: req.params.id }}
+    )
+
+    // response retorna um vetor. O primeiro elemento
+    // do vetor indica quantos registros foram afetados
+    // pelo update
+    if(response[0] > 0) {
+      // HTTP 204: No content
+      res.status(204).end()
+    }
+    else {  // Não encontrou o registro para atualizar
+      // HTTP 404: Not found
+      res.status(404).end()
+    }
+  }
+  catch(error) {
+    console.error(error)
+  }
+}
+
+controller.delete = async (req, res) => {
+  try {
+    const response = await User.destroy(
+      { where: { id: req.params.id } }
+    )
+
+    if(response) {  // Encontrou e excluiu
+      // HTTP 204: No content
+      res.status(204).end()
+    }
+    else {          // Não encontrou e não excluiu
+      // HTTP 404: Not found
+      res.status(404).end()
     }
   }
   catch(error) {
@@ -96,7 +131,17 @@ controller.login = async (req, res) => {
       )
 
       // Retorna o token ~> HTTP 200: OK (implícito)
-      res.json({ auth: true, token })
+      //res.json({ auth: true, token })
+      
+      res.cookie('AUTH', token, { 
+        httpOnly: true, 
+        secure: true,
+        sameSite: 'None',
+        path: '/',
+        maxAge: 24 * 60 * 60  // 24 horas, em segundos
+      })
+      res.json({auth: true})
+      
     }
     else {
       // Senha errada ~> HTTP 401: Unauthorized
@@ -106,6 +151,11 @@ controller.login = async (req, res) => {
   catch(error) {
     console.error(error)
   }
+}
+
+controller.logout = (req, res) => {
+  res.clearCookie('AUTH') // Apaga o cookie
+  res.json({ auth: false })
 }
 
 module.exports = controller
